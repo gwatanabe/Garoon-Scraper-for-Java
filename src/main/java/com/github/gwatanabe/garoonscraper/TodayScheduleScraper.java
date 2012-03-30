@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * 
+ * 
+ * @author watanabe
+ *
+ */
 public class TodayScheduleScraper
 {
 	private static final SimpleDateFormat formater = new SimpleDateFormat( "'&amp;bdate='yyyy-MM-dd" );

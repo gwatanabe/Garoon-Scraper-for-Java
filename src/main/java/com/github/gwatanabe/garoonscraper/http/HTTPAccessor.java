@@ -25,6 +25,9 @@ public class HTTPAccessor
 	/** HTTP method. post is true. get is false. */
 	private final boolean isPost;
 
+	/** response HTML encoding */
+	private String encoding = "UTF-8";
+
 	/**
 	 * Constractor.
 	 * 
@@ -45,6 +48,16 @@ public class HTTPAccessor
 	public HTTPAccessor( URL targetURL )
 	{
 		this( targetURL, false );
+	}
+
+	/**
+	 * set read HTML encoding.
+	 * 
+	 * @param encoding "UTF-8", "Shift_JIS" etc
+	 */
+	public void setEncoding( String encoding )
+	{
+		this.encoding = encoding;
 	}
 
 	/**
@@ -95,15 +108,16 @@ public class HTTPAccessor
 		}
 
 		List<String> result = read( http );
+		int responseCode = http.getResponseCode();
 
-		return( new HTTPAccessResult( result, manager ) );
+		return( new HTTPAccessResult( responseCode, result, manager ) );
 	}
 
 	/**
+	 * request write.
 	 * 
-	 * 
-	 * @param http
-	 * @param parameter
+	 * @param http HttpURLConnection
+	 * @param parameter write parameter
 	 * @throws IOException
 	 */
 	private void write( HttpURLConnection http, String parameter ) throws IOException
@@ -141,6 +155,13 @@ public class HTTPAccessor
 		}
 	}
 
+	/**
+	 * response read.
+	 * 
+	 * @param http HttpURLConnection
+	 * @return List<String> html
+	 * @throws IOException
+	 */
 	private List<String> read( HttpURLConnection http ) throws IOException
 	{
 		List<String> result = new ArrayList<String>();
@@ -152,7 +173,7 @@ public class HTTPAccessor
 		{
 			// 応答内容取得
 			is = http.getInputStream();
-			reader = new BufferedReader( new InputStreamReader( is, "UTF-8" ) );
+			reader = new BufferedReader( new InputStreamReader( is, encoding ) );
 
 			for( String line = reader.readLine(); line != null; line = reader.readLine() )
 			{
