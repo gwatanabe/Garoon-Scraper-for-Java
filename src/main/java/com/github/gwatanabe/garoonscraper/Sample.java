@@ -37,7 +37,7 @@ public class Sample
 				// Schedule Myself.
 				case	0 :
 				{
-					Schedule schedule = GaroonScraper.getMySchedule( url, account, password );
+					Schedule schedule = TodayScheduleScraper.getMySchedule( url, account, password );
 
 					scheduleList.add( schedule );
 					break;
@@ -45,7 +45,7 @@ public class Sample
 
 				default:
 				{
-					List<Schedule> list = GaroonScraper.getTargetUserSchedule( url, account, password, targetUserList );
+					List<Schedule> list = TodayScheduleScraper.getTargetUserSchedule( url, account, password, targetUserList );
 
 					scheduleList.addAll( list );
 					break;
