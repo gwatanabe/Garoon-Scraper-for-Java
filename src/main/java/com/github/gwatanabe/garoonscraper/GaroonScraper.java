@@ -1,7 +1,6 @@
 package com.github.gwatanabe.garoonscraper;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,69 +10,7 @@ import com.github.gwatanabe.garoonscraper.http.HTTPAccessor;
 
 public class GaroonScraper
 {
-	private URL url;
-	private String account;
-	private String password;
-	private List<String> argsTargetUsers = new ArrayList<String>();
-
-	public GaroonScraper( String[] args ) throws MalformedURLException
-	{
-		parseArgs( args );
-	}
-
-	private boolean parseArgs( String[] args ) throws MalformedURLException
-	{
-		boolean result = false;
-
-		if( args.length >= 3 )
-		{
-			// 引数の分解
-			url = new URL( args[ 0 ] );
-			account = args[ 1 ];
-			password = args[ 2 ];
-
-			if( args.length > 3 )
-			{
-				for( int i = 3; i < args.length; i++ )
-				{
-					argsTargetUsers.add( args[ i ] );
-				}
-			}
-
-			result = true;
-		}
-
-		return( result );
-	}
-
-	public List<Schedule> execute() throws IOException
-	{
-		List<Schedule> resultList = new ArrayList<Schedule>();
-
-		switch( argsTargetUsers.size() )
-		{
-			// Schedule Myself.
-			case	0 :
-			{
-				Schedule schedule = executeMySchedule( url, account, password );
-
-				resultList.add( schedule );
-				break;
-			}
-
-			default:
-			{
-				List<Schedule> list = executeOtherSchedule( url, account, password, argsTargetUsers);
-
-				resultList.addAll( list );
-				break;
-			}
-		}
-
-		return( resultList );
-	}
-
-	public Schedule executeMySchedule( URL url, String account, String password ) throws IOException
+	public static Schedule getMySchedule( URL url, String account, String password ) throws IOException
 	{
 		Schedule schedule = new Schedule( account );
 
@@ -92,7 +29,7 @@ public class GaroonScraper
 		return( schedule );
 	}
 
-	public List<Schedule> executeOtherSchedule( URL url, String account, String password, List<String> targetUserList ) throws IOException
+	public static List<Schedule> getTargetUserSchedule( URL url, String account, String password, List<String> targetUserList ) throws IOException
 	{
 		List<Schedule> resultList = new ArrayList<Schedule>();
 
